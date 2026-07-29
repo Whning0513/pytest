@@ -113,6 +113,7 @@ def _has_differing_whitespace(left: str, right: str) -> bool:
         and any(char.isspace() for char in left[i1:i2] + right[j1:j2])
         for tag, i1, i2, j1, j2 in matcher.get_opcodes()
     )
+
 def _cap_ndiff_input(text: str, keepends: bool, budget: TruncationBudget) -> list[str]:
     """Cap an ``ndiff`` input to the truncation budget, as split lines.
 
