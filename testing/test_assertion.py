@@ -568,12 +568,11 @@ class TestAssert_reprcompare:
         assert sum(len(line) for line in full) > 100_000
 
     def test_text_diff_escapes_differing_whitespace(self) -> None:
-        lines = callequal("prefix" + "x" * 50 + "
-", "prefix" + "x" * 50 + " ")
+        lines = callequal("prefix" + "x" * 50 + "\n", "prefix" + "x" * 50 + " ")
         assert lines is not None
-        assert any(r"
-" in line for line in lines)
+        assert any(r"\n" in line for line in lines)
         assert any("differing whitespace" in line for line in lines)
+
     def test_text_skipping(self) -> None:
         lines = callequal("a" * 50 + "spam", "a" * 50 + "eggs")
         assert lines is not None
