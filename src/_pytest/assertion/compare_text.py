@@ -100,16 +100,11 @@ def _diff_text(
     ).splitlines()
 
 
-
 def _has_differing_whitespace(left: str, right: str) -> bool:
     """Return whether a single-line diff changes a whitespace character."""
     from difflib import SequenceMatcher
 
-    if "
-" in left.rstrip("
-") or "
-" in right.rstrip("
-"):
+    if "\n" in left.rstrip("\n") or "\n" in right.rstrip("\n"):
         return False
 
     matcher = SequenceMatcher(None, left, right)
