@@ -81,6 +81,10 @@ def _diff_text(
                 )
                 left = left[:-i]
                 right = right[:-i]
+    if _has_differing_whitespace(left, right):
+        left = repr(str(left))
+        right = repr(str(right))
+        yield "Strings contain differing whitespace, escaping them using repr()"
     keepends = True
     if left.isspace() or right.isspace():
         left = repr(str(left))
@@ -96,6 +100,24 @@ def _diff_text(
     ).splitlines()
 
 
+
+def _has_differing_whitespace(left: str, right: str) -> bool:
+    """Return whether a single-line diff changes a whitespace character."""
+    from difflib import SequenceMatcher
+
+    if "
+" in left.rstrip("
+") or "
+" in right.rstrip("
+"):
+        return False
+
+    matcher = SequenceMatcher(None, left, right)
+    return any(
+        tag != "equal"
+        and any(char.isspace() for char in left[i1:i2] + right[j1:j2])
+        for tag, i1, i2, j1, j2 in matcher.get_opcodes()
+    )
 def _cap_ndiff_input(text: str, keepends: bool, budget: TruncationBudget) -> list[str]:
     """Cap an ``ndiff`` input to the truncation budget, as split lines.
 
