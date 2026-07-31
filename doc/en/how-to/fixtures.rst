@@ -499,6 +499,12 @@ Fixtures are created when first requested by a test, and are destroyed based on 
 * ``package``: the fixture is destroyed during teardown of the last test in the package where the fixture is defined, including sub-packages and sub-directories within it.
 * ``session``: the fixture is destroyed at the end of the test session.
 
+.. warning::
+   Do not import a fixture function from another test module and call it directly.
+   Importing a fixture bypasses the pytest fixture machinery, so dependencies and
+   teardown are not handled as they are when the fixture is requested by a test.
+   Put fixtures shared by multiple test modules in a ``conftest.py`` file instead.
+
 .. note::
 
     Pytest only caches one instance of a fixture at a time, which
